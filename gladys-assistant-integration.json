@@ -1,0 +1,73 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Gladys Phone",
+  "description": {
+    "en": "GPS positions and phone sensors (battery) from the Gladys Phone app, even when it is closed.",
+    "fr": "Positions GPS et capteurs du téléphone (batterie) depuis l'app Gladys Phone, même app fermée."
+  },
+  "version": "0.2.0",
+  "docker_image": "ghcr.io/jeremiemercier/gladys-phone:0.2.0",
+  "gladys_version": ">=4.85.0",
+  "cover_image": "https://raw.githubusercontent.com/JeremieMercier/gladys-phone/main/cover.png",
+  "containers": [
+    {
+      "name": "receiver",
+      "docker_image": "ghcr.io/jeremiemercier/gladys-phone:0.2.0",
+      "command": ["node", "receiver.js"],
+      "start": "manual",
+      "memory_mb": 64,
+      "cpu": 0.25,
+      "ports": [
+        {
+          "container_port": 8080,
+          "protocol": "tcp",
+          "name": "beacon",
+          "browsable": false,
+          "label": {
+            "en": "Positions endpoint",
+            "fr": "Point d'entrée des positions"
+          }
+        }
+      ]
+    }
+  ],
+  "config_schema": [
+    {
+      "key": "howto",
+      "type": "section",
+      "label": { "en": "Getting started", "fr": "Mise en route" },
+      "description": {
+        "en": "The receiver listens on http://{{gladys_host}}:{{port:beacon}}. Expose that address to your phone (reverse proxy in HTTPS, or VPN), then paste the public URL in the Gladys Phone app. Each phone authenticates with its own Gladys API key: nothing else to configure here.",
+        "fr": "Le récepteur écoute sur http://{{gladys_host}}:{{port:beacon}}. Exposez cette adresse à votre téléphone (reverse proxy en HTTPS, ou VPN), puis renseignez l'URL publique dans l'application Gladys Phone. Chaque téléphone s'authentifie avec sa propre clé d'API Gladys : rien d'autre à configurer ici."
+      },
+      "links": [
+        {
+          "url": "https://github.com/JeremieMercier/gladys-phone",
+          "label": { "en": "Setup guide", "fr": "Guide d'installation" }
+        }
+      ]
+    },
+    {
+      "key": "instance_url",
+      "type": "string",
+      "label": { "en": "Local Gladys URL", "fr": "URL locale de Gladys" },
+      "description": {
+        "en": "Address the receiver uses to reach this Gladys instance. Leave empty to detect it automatically.",
+        "fr": "Adresse utilisée par le récepteur pour joindre cette instance Gladys. Laissez vide pour une détection automatique."
+      },
+      "required": false,
+      "placeholder": {
+        "en": "http://192.168.1.10",
+        "fr": "http://192.168.1.10"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "key": "check_health",
+      "label": { "en": "Test the receiver", "fr": "Tester le récepteur" },
+      "timeout_seconds": 15
+    }
+  ]
+}
