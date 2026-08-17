@@ -72,9 +72,10 @@ gladys.onAction('check_health', async () => {
   const coreReachable = gladysUrl !== '' && (await isCoreReachable(gladysUrl));
 
   if (receiverUp && coreReachable) {
+    const detected = config.instance_url === '';
     return {
-      en: 'Receiver up, Gladys reachable. Ready to receive positions.',
-      fr: 'Récepteur actif, Gladys joignable. Prêt à recevoir des positions.',
+      en: `Receiver up, Gladys reachable at "${gladysUrl}" (${detected ? 'auto-detected' : 'from your configuration'}). Ready to receive positions.`,
+      fr: `Récepteur actif, Gladys joignable sur « ${gladysUrl} » (${detected ? 'détectée automatiquement' : 'issue de votre configuration'}). Prêt à recevoir des positions.`,
     };
   }
   if (!receiverUp) {

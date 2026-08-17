@@ -58,8 +58,8 @@
       },
       "required": false,
       "placeholder": {
-        "en": "http://192.168.1.10",
-        "fr": "http://192.168.1.10"
+        "en": "e.g. http://192.168.1.10 (example, not your instance)",
+        "fr": "ex. : http://192.168.1.10 (exemple, pas votre instance)"
       }
     }
   ],
