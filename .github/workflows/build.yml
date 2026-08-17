@@ -111,9 +111,11 @@ jobs:
         env:
           IMAGE_REF: ${{ steps.meta.outputs.image_ref }}
         run: |
-          # Manifest with `docker_image` pointing at the image just pushed,
+          # Manifest with every `docker_image` (top-level and sub-containers,
+          # `[]?`: no-op without them) pointing at the image just pushed,
           # ready to paste into Gladys developer mode.
-          manifest=$(jq --arg image "$IMAGE_REF" '.docker_image = $image' \
+          manifest=$(jq --arg image "$IMAGE_REF" \
+            '.docker_image = $image | (.containers[]?.docker_image) = $image' \
             gladys-assistant-integration.json)
           {
             echo "## Docker build summary"

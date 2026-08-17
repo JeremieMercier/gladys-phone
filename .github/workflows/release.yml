@@ -64,10 +64,11 @@ jobs:
           image="ghcr.io/${GITHUB_REPOSITORY,,}:${new_version}"
 
           # Keep the manifest in lockstep: the version the indexer reads AND the
-          # image tag Gladys pulls must both point at this release.
+          # image tags Gladys pulls must all point at this release — including
+          # the per-sub-container `docker_image` (`[]?`: no-op without them).
           tmp="$(mktemp)"
           jq --arg version "$new_version" --arg image "$image" \
-            '.version = $version | .docker_image = $image' \
+            '.version = $version | .docker_image = $image | (.containers[]?.docker_image) = $image' \
             gladys-assistant-integration.json > "$tmp"
           mv "$tmp" gladys-assistant-integration.json
 
